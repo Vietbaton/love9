@@ -10,53 +10,41 @@
         :root { --gold: #d4af37; --red: #8b0000; --light: #f3e5ab; }
         * { box-sizing: border-box; }
         body { margin: 0; background: #2b0000; font-family: 'Quicksand', sans-serif; color: var(--light); overflow-x: hidden; }
-
-        /* DECORATION */
         .bg-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #6b0000, #2b0000); z-index: -1; }
+        
+        /* FIX LINK LỒNG ĐÈN */
         .lantern { position: fixed; top: -10px; width: 50px; z-index: 100; animation: swing 3s ease-in-out infinite; transform-origin: top center; }
         @keyframes swing { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
 
-        /* HEADER & CLOCK */
         .header-top { padding: 15px; background: rgba(0,0,0,0.5); border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 500; text-align: center; }
         .progress-container { width: 80%; max-width: 300px; height: 8px; background: #444; margin: 10px auto; border-radius: 10px; border: 1px solid var(--gold); }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), #fff); width: 0%; transition: 1s; }
 
-        /* SELECTION SCREEN */
         #selection-screen { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .title-gold { font-family: 'Cinzel'; font-size: clamp(2rem, 10vw, 3.5rem); color: var(--gold); text-shadow: 0 0 20px rgba(212,175,55,0.6); margin-bottom: 10px; }
         .user-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 900px; width: 100%; margin-top: 30px; }
         .user-card { background: rgba(255,255,255,0.05); border: 2px solid var(--gold); padding: 18px; border-radius: 15px; font-weight: bold; transition: 0.4s; cursor: pointer; }
         .user-card:hover { background: var(--gold); color: var(--red); transform: translateY(-10px); box-shadow: 0 0 20px var(--gold); }
 
-        /* PASSWORD MODAL */
         #password-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         .modal-box { background: linear-gradient(135deg, #8b0000, #4a0000); padding: 40px; border-radius: 25px; border: 3px solid var(--gold); text-align: center; width: 90%; max-width: 340px; }
         input { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.5rem; text-align: center; margin: 20px 0; background: var(--light); color: var(--red); font-weight: bold; }
 
-        /* LÌ XÌ INTERACTIVE */
+        /* FIX LINK LÌ XÌ */
         #lixi-layer { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-        .lixi-img { width: 180px; animation: bounce 1.2s infinite; }
+        .lixi-img { width: 150px; animation: bounce 1.2s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-30px) rotate(5deg); } }
 
-        /* MAIN CONTENT */
         #main-content { display: none; padding: 40px 15px; animation: fadeIn 1.5s ease; text-align: center; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .wish-box { background: white; color: var(--red); padding: 35px; border-radius: 20px; border: 6px double var(--gold); max-width: 600px; margin: 30px auto; font-family: 'Dancing Script'; font-size: 1.8rem; box-shadow: 0 20px 50px rgba(0,0,0,0.7); position: relative; line-height: 1.6; }
 
-        /* GAME ZONE */
-        .game-zone { margin: 50px auto; padding: 25px; border: 1px dashed var(--gold); border-radius: 20px; max-width: 500px; background: rgba(255,255,255,0.03); }
-        .btn-game { background: #ff0000; color: white; padding: 15px 35px; border-radius: 50px; border: 2px solid var(--gold); font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-
-        /* PHOTO GALLERY - FIXED FOR VERCEL */
         .photo-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 50px; }
         .polaroid { background: white; padding: 12px 12px 35px; box-shadow: 0 10px 30px #000; width: 100%; max-width: 300px; }
-        .polaroid img { width: 100%; height: auto; display: block; border: 1px solid #eee; }
-        .polaroid p { color: #333; font-weight: bold; margin-top: 15px; font-size: 1rem; }
+        .polaroid img { width: 100%; height: auto; display: block; }
+        .polaroid p { color: #333; font-weight: bold; margin-top: 15px; }
 
-        /* EFFECTS */
         .petal { position: fixed; background: #ffeb3b; border-radius: 50% 0 50% 0; pointer-events: none; animation: fall linear infinite; z-index: 999; }
         @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
-        
         .countdown { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
         .time-unit { background: var(--gold); color: var(--red); padding: 10px; border-radius: 8px; min-width: 65px; font-weight: 700; }
         .time-unit span { display: block; font-size: 1.5rem; }
@@ -64,8 +52,9 @@
 </head>
 <body onmousemove="drawMagic(event)">
     <div class="bg-overlay"></div>
-    <img src="https://i.imgur.com/v2Y8N0W.png" class="lantern" style="left: 5%;">
-    <img src="https://i.imgur.com/v2Y8N0W.png" class="lantern" style="right: 5%;">
+    
+    <img src="https://img.icons8.com/papercut/100/lantern.png" class="lantern" style="left: 5%;">
+    <img src="https://img.icons8.com/papercut/100/lantern.png" class="lantern" style="right: 5%;">
 
     <div class="header-top">
         <div id="clockDisplay" style="color: var(--gold); font-weight: bold; font-size: 1.2rem;">00:00:00</div>
@@ -74,24 +63,24 @@
 
     <div id="selection-screen">
         <h1 class="title-gold">XUÂN BÍNH NGỌ</h1>
-        <p style="letter-spacing: 3px; opacity: 0.8; font-weight: bold;">HỘI BẠN 2011 - KỶ NIỆM 15 NĂM</p>
+        <p style="letter-spacing: 2px; opacity: 0.8; font-weight: bold;">HỘI BẠN 2011 - KỶ NIỆM 15 NĂM</p>
         <div class="user-grid" id="userGrid"></div>
-        <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.4;">© 2026 Developed by Hoang Huu Viet</p>
+        <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.4;">© 2026 Designed by Việt</p>
     </div>
 
     <div id="password-modal">
         <div class="modal-box">
-            <h2 id="userName" style="color: var(--gold); margin-top: 0;"></h2>
-            <p>Nhập mật khẩu ngày sinh</p>
+            <h2 id="userName" style="color: var(--gold); margin: 0;"></h2>
+            <p>Mật khẩu là 8 số ngày sinh</p>
             <input type="tel" id="passInput" maxlength="8" placeholder="********">
-            <button class="btn-game" style="width: 100%;" onclick="checkAuth()">MỞ LÌ XÌ</button>
-            <p onclick="location.reload()" style="font-size: 0.8rem; margin-top: 20px; cursor: pointer; text-decoration: underline;">Quay lại</p>
+            <button onclick="checkAuth()" style="background:var(--gold); border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">XÁC NHẬN</button>
+            <p onclick="location.reload()" style="font-size:0.8rem; margin-top:15px; cursor:pointer;">Quay lại</p>
         </div>
     </div>
 
     <div id="lixi-layer" onclick="launchMain()">
-        <img src="https://i.imgur.com/YmKzGOn.png" class="lixi-img">
-        <h2 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 20px; text-shadow: 2px 2px 10px #000;">CHẠM VÀO LÌ XÌ ĐỂ NHẬN QUÀ</h2>
+        <img src="https://img.icons8.com/emoji/128/red-envelope.png" class="lixi-img">
+        <h2 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 20px;">BẤM VÀO LÌ XÌ ĐỂ NHẬN QUÀ</h2>
     </div>
 
     <div id="main-content">
@@ -104,24 +93,16 @@
 
         <div class="wish-box" id="wishDisplay"></div>
 
-        <div class="game-zone">
-            <h3 style="color: var(--gold); margin-top: 0;">🏮 QUẺ THĂM ĐẦU NĂM 🏮</h3>
-            <p id="queText" style="min-height: 50px; font-weight: bold;">Năm 2026 của bạn sẽ ra sao?</p>
-            <button class="btn-game" onclick="spinQue()">GIEO QUẺ</button>
-        </div>
-
         <div class="photo-container">
             <div class="polaroid" style="transform: rotate(-3deg);">
-                <img src="./9b1.jpg" onerror="this.src='https://files.catbox.moe/gclh5a.jpg'">
+                <img src="./9b1.jpg" onerror="this.src='https://picsum.photos/300/200?sig=1'">
                 <p>Kỷ niệm lớp 9B 🧧</p>
             </div>
             <div class="polaroid" style="transform: rotate(3deg);">
-                <img src="./9b2.jpg" onerror="this.src='https://files.catbox.moe/44shj4.jpg'">
+                <img src="./9b2.jpg" onerror="this.src='https://picsum.photos/300/200?sig=2'">
                 <p>Mãi là bạn tốt ✨</p>
             </div>
         </div>
-        
-        <p style="margin-top: 60px; opacity: 0.3; font-size: 0.8rem;">© 2026 Hoang Huu Viet - Vercel Edition</p>
     </div>
 
     <script>
@@ -138,8 +119,6 @@
             { n: "Lương Việt Anh", p: "03052011", w: "Chúc Việt Anh năm mới thông minh, sáng tạo và luôn vui vẻ như hiện tại!" }
         ];
 
-        const queresults = ["Quẻ Đại Cát: Tiền vào như nước, tình duyên phơi phới!", "Quẻ Học Thần: Thi đâu đỗ đó, kiến thức đầy mình!", "Quẻ Quý Nhân: Luôn có người giúp đỡ, vạn sự hanh thông!", "Quẻ Sức Khỏe: Khỏe như rồng, vui như Tết cả năm!", "Quẻ May Mắn: Cứ ra đường là gặp bnhieu điều tốt lành!"];
-
         let currentU = null;
         const grid = document.getElementById('userGrid');
         data.forEach(item => {
@@ -153,7 +132,7 @@
                 document.getElementById('password-modal').style.display = 'none';
                 document.getElementById('lixi-layer').style.display = 'flex';
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            } else { alert("Mật khẩu kh đúng rùi!"); }
+            } else { alert("Sai mã rùi Việt ơi!"); }
         }
 
         function launchMain() {
@@ -163,16 +142,6 @@
             document.getElementById('wishDisplay').innerText = currentU.w;
             startCD();
             setInterval(makePetal, 400);
-            boom();
-        }
-
-        function boom() {
-            var end = Date.now() + 2000;
-            (function f() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#d4af37'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#d4af37'] });
-                if (Date.now() < end) requestAnimationFrame(f);
-            }());
         }
 
         setInterval(() => {
@@ -190,14 +159,6 @@
                 document.getElementById('cd-m').innerText = Math.floor((d%3600000)/60000);
                 document.getElementById('cd-s').innerText = Math.floor((d%60000)/1000);
             }, 1000);
-        }
-
-        function spinQue() {
-            document.getElementById('queText').innerText = "Đang gieo quẻ...";
-            setTimeout(() => {
-                document.getElementById('queText').innerText = "KẾT QUẢ: " + queresults[Math.floor(Math.random()*queresults.length)];
-                confetti({ particleCount: 40, scalar: 0.7 });
-            }, 800);
         }
 
         function makePetal() {
