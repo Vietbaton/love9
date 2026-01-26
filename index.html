@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xuân Bính Ngọ 2026 - Siêu Phẩm Hội Bạn 2011</title>
+    <title>Xuân Bính Ngọ 2026 - Hội Bạn 2011</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Dancing+Script:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -11,44 +11,49 @@
         * { box-sizing: border-box; }
         body { margin: 0; background: #2b0000; font-family: 'Quicksand', sans-serif; color: var(--light); overflow-x: hidden; }
 
-        /* NỀN ĐỘNG & LỒNG ĐÈN */
+        /* DECORATION */
         .bg-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #6b0000, #2b0000); z-index: -1; }
         .lantern { position: fixed; top: -10px; width: 50px; z-index: 100; animation: swing 3s ease-in-out infinite; transform-origin: top center; }
         @keyframes swing { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
 
-        /* HEADER */
-        .header-top { padding: 15px; background: rgba(0,0,0,0.4); border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 500; }
+        /* HEADER & CLOCK */
+        .header-top { padding: 15px; background: rgba(0,0,0,0.5); border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 500; text-align: center; }
         .progress-container { width: 80%; max-width: 300px; height: 8px; background: #444; margin: 10px auto; border-radius: 10px; border: 1px solid var(--gold); }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), #fff); width: 0%; transition: 1s; }
 
-        /* MÀN HÌNH CHỌN TÊN */
-        #selection-screen { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .title-gold { font-family: 'Cinzel'; font-size: clamp(2rem, 10vw, 3.5rem); color: var(--gold); text-shadow: 0 0 20px rgba(212,175,55,0.6); margin-bottom: 0; }
+        /* SELECTION SCREEN */
+        #selection-screen { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .title-gold { font-family: 'Cinzel'; font-size: clamp(2rem, 10vw, 3.5rem); color: var(--gold); text-shadow: 0 0 20px rgba(212,175,55,0.6); margin-bottom: 10px; }
         .user-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 900px; width: 100%; margin-top: 30px; }
         .user-card { background: rgba(255,255,255,0.05); border: 2px solid var(--gold); padding: 18px; border-radius: 15px; font-weight: bold; transition: 0.4s; cursor: pointer; }
         .user-card:hover { background: var(--gold); color: var(--red); transform: translateY(-10px); box-shadow: 0 0 20px var(--gold); }
 
-        /* MODAL MẬT KHẨU */
+        /* PASSWORD MODAL */
         #password-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         .modal-box { background: linear-gradient(135deg, #8b0000, #4a0000); padding: 40px; border-radius: 25px; border: 3px solid var(--gold); text-align: center; width: 90%; max-width: 340px; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.4rem; text-align: center; margin: 20px 0; background: var(--light); color: var(--red); font-weight: bold; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.5rem; text-align: center; margin: 20px 0; background: var(--light); color: var(--red); font-weight: bold; }
 
-        /* LÌ XÌ BAY */
-        #lixi-layer { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.85); flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+        /* LÌ XÌ INTERACTIVE */
+        #lixi-layer { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
         .lixi-img { width: 180px; animation: bounce 1.2s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-30px) rotate(5deg); } }
 
-        /* NỘI DUNG CHÍNH */
-        #main-content { display: none; padding: 40px 15px; animation: fadeIn 1.5s ease; }
+        /* MAIN CONTENT */
+        #main-content { display: none; padding: 40px 15px; animation: fadeIn 1.5s ease; text-align: center; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        .wish-box { background: white; color: var(--red); padding: 35px; border-radius: 20px; border: 6px double var(--gold); max-width: 600px; margin: 30px auto; font-family: 'Dancing Script'; font-size: 1.8rem; box-shadow: 0 20px 50px rgba(0,0,0,0.7); position: relative; }
-        .wish-box::before { content: '🧧'; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 3rem; }
+        .wish-box { background: white; color: var(--red); padding: 35px; border-radius: 20px; border: 6px double var(--gold); max-width: 600px; margin: 30px auto; font-family: 'Dancing Script'; font-size: 1.8rem; box-shadow: 0 20px 50px rgba(0,0,0,0.7); position: relative; line-height: 1.6; }
 
-        /* GAME GIEO QUẺ */
+        /* GAME ZONE */
         .game-zone { margin: 50px auto; padding: 25px; border: 1px dashed var(--gold); border-radius: 20px; max-width: 500px; background: rgba(255,255,255,0.03); }
-        .btn-game { background: #ff0000; color: white; padding: 15px 35px; border-radius: 50px; border: 2px solid var(--gold); font-weight: bold; cursor: pointer; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(255,0,0,0.4); }
+        .btn-game { background: #ff0000; color: white; padding: 15px 35px; border-radius: 50px; border: 2px solid var(--gold); font-weight: bold; cursor: pointer; font-size: 1.1rem; }
 
-        /* CÁNH HOA MAI */
+        /* PHOTO GALLERY - FIXED FOR VERCEL */
+        .photo-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 50px; }
+        .polaroid { background: white; padding: 12px 12px 35px; box-shadow: 0 10px 30px #000; width: 100%; max-width: 300px; }
+        .polaroid img { width: 100%; height: auto; display: block; border: 1px solid #eee; }
+        .polaroid p { color: #333; font-weight: bold; margin-top: 15px; font-size: 1rem; }
+
+        /* EFFECTS */
         .petal { position: fixed; background: #ffeb3b; border-radius: 50% 0 50% 0; pointer-events: none; animation: fall linear infinite; z-index: 999; }
         @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
         
@@ -69,7 +74,7 @@
 
     <div id="selection-screen">
         <h1 class="title-gold">XUÂN BÍNH NGỌ</h1>
-        <p style="letter-spacing: 3px; opacity: 0.8;">HỘI BẠN LỚP 9B - NIÊN KHÓA 2011</p>
+        <p style="letter-spacing: 3px; opacity: 0.8; font-weight: bold;">HỘI BẠN 2011 - KỶ NIỆM 15 NĂM</p>
         <div class="user-grid" id="userGrid"></div>
         <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.4;">© 2026 Developed by Hoang Huu Viet</p>
     </div>
@@ -77,16 +82,16 @@
     <div id="password-modal">
         <div class="modal-box">
             <h2 id="userName" style="color: var(--gold); margin-top: 0;"></h2>
-            <p>Nhập 8 số ngày sinh để mở lì xì</p>
+            <p>Nhập mật khẩu ngày sinh</p>
             <input type="tel" id="passInput" maxlength="8" placeholder="********">
-            <button class="btn-game" style="width: 100%;" onclick="checkAuth()">XÁC NHẬN</button>
+            <button class="btn-game" style="width: 100%;" onclick="checkAuth()">MỞ LÌ XÌ</button>
             <p onclick="location.reload()" style="font-size: 0.8rem; margin-top: 20px; cursor: pointer; text-decoration: underline;">Quay lại</p>
         </div>
     </div>
 
     <div id="lixi-layer" onclick="launchMain()">
         <img src="https://i.imgur.com/YmKzGOn.png" class="lixi-img">
-        <h2 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 20px;">CHẠM VÀO LÌ XÌ ĐỂ NHẬN QUÀ</h2>
+        <h2 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 20px; text-shadow: 2px 2px 10px #000;">CHẠM VÀO LÌ XÌ ĐỂ NHẬN QUÀ</h2>
     </div>
 
     <div id="main-content">
@@ -101,45 +106,41 @@
 
         <div class="game-zone">
             <h3 style="color: var(--gold); margin-top: 0;">🏮 QUẺ THĂM ĐẦU NĂM 🏮</h3>
-            <p id="queText" style="min-height: 50px;">Năm 2026 của bạn sẽ ra sao?</p>
+            <p id="queText" style="min-height: 50px; font-weight: bold;">Năm 2026 của bạn sẽ ra sao?</p>
             <button class="btn-game" onclick="spinQue()">GIEO QUẺ</button>
         </div>
 
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
-            <div style="background: white; padding: 10px 10px 30px; box-shadow: 0 10px 30px #000; transform: rotate(-3deg); width: 280px;">
-                <img src="https://files.catbox.moe/gclh5a.jpg" style="width: 100%;">
-                <p style="color: #333; font-weight: bold; margin-top: 10px;">9B Kỷ Niệm 🧧</p>
+        <div class="photo-container">
+            <div class="polaroid" style="transform: rotate(-3deg);">
+                <img src="./9b1.jpg" onerror="this.src='https://files.catbox.moe/gclh5a.jpg'">
+                <p>Kỷ niệm lớp 9B 🧧</p>
             </div>
-            <div style="background: white; padding: 10px 10px 30px; box-shadow: 0 10px 30px #000; transform: rotate(3deg); width: 280px;">
-                <img src="https://files.catbox.moe/44shj4.jpg" style="width: 100%;">
-                <p style="color: #333; font-weight: bold; margin-top: 10px;">Mãi Là Bạn Tốt ✨</p>
+            <div class="polaroid" style="transform: rotate(3deg);">
+                <img src="./9b2.jpg" onerror="this.src='https://files.catbox.moe/44shj4.jpg'">
+                <p>Mãi là bạn tốt ✨</p>
             </div>
         </div>
+        
+        <p style="margin-top: 60px; opacity: 0.3; font-size: 0.8rem;">© 2026 Hoang Huu Viet - Vercel Edition</p>
     </div>
-
-    <audio id="tetMusic" loop>
-        <source src="https://api.vibe.com/v1/tracks/spring-music-demo.mp3" type="audio/mpeg">
-    </audio>
 
     <script>
         const data = [
-            { n: "Nông Hữu Hiệp", p: "10112011", w: "Chúc Hiệp năm mới Bính Ngọ bứt phá mạnh mẽ, đạt dc bnhieu mục tiêu lớn và luôn giữ vững phong độ nhé!" },
-            { n: "Dương Thị Khánh Linh", p: "23052011", w: "Chúc Khánh Linh luôn xinh đẹp như hoa mùa xuân, gặp dc bnhieu may mắn và hạnh phúc viên mãn!" },
-            { n: "Hoàng Ngọc Anh", p: "07062011", w: "Chúc Ngọc Anh năm 2026 học hành tấn tới, nhan sắc thăng hạng và vạn sự như ý!" },
-            { n: "Hoàng Thị Thu Hương", p: "15112011", w: "Chúc Thu Hương năm mới an khang thịnh vượng, nụ cười luôn nở trên môi và gặp bnhieu tin vui!" },
-            { n: "Dương Huyền Trang", p: "25022011", w: "Chúc Huyền Trang một năm Bính Ngọ rực rỡ, thành công rực rỡ và luôn tràn đầy năng lượng tích cực!" },
-            { n: "Lương Hoài Vân", p: "21052011", w: "Chúc Hoài Vân năm mới bnhieu niềm vui mới, học tốt, xinh đẹp và luôn dc mọi người yêu mến!" },
-            { n: "Lương Bình Minh", p: "04122011", w: "Chúc Bình Minh khởi đầu năm mới rạng rỡ như tên gọi, đạt dc bnhieu thành tích xuất sắc nhé!" },
-            { n: "Hoàng Hải Việt", p: "04012011", w: "Chúc Hải Việt năm mới vạn sự hanh thông, sức khỏe dồi dào và chinh phục bnhieu thử thách!" },
-            { n: "Vi Trần Bảo", p: "06092011", w: "Chúc Bảo năm mới phong độ, tiền tài rủng rỉnh và mãi là anh em tốt của nhóm!" },
-            { n: "Lương Việt Anh", p: "03052011", w: "Chúc Việt Anh năm mới thông minh bứt phá, gặp dc bnhieu cơ hội tốt và luôn hạnh phúc!" }
+            { n: "Nông Hữu Hiệp", p: "10112011", w: "Chúc Hiệp năm mới Bính Ngọ mạnh khỏe, học tập tiến tới và đạt dc bnhieu mục tiêu đề ra nhé!" },
+            { n: "Dương Thị Khánh Linh", p: "23052011", w: "Chúc Linh luôn xinh đẹp, dịu dàng và một năm mới tràn ngập niềm vui bên gia đình!" },
+            { n: "Hoàng Ngọc Anh", p: "07062011", w: "Chúc Ngọc Anh năm 2026 thật rực rỡ, học giỏi và luôn là cô gái tự tin!" },
+            { n: "Hoàng Thị Thu Hương", p: "15112011", w: "Chúc Thu Hương năm mới vạn sự như ý, luôn tươi cười và gặp thật nhiều may mắn!" },
+            { n: "Dương Huyền Trang", p: "25022011", w: "Chúc Huyền Trang một năm Bính Ngọ đầy năng lượng, học siêu giỏi và luôn hạnh phúc!" },
+            { n: "Lương Hoài Vân", p: "21052011", w: "Chúc Hoài Vân năm mới xinh đẹp hơn, học tốt và có thật nhiều kỷ niệm đẹp!" },
+            { n: "Lương Bình Minh", p: "04122011", w: "Chúc Bình Minh khởi đầu năm mới rạng rỡ, thành công và luôn giữ vững phong độ!" },
+            { n: "Hoàng Hải Việt", p: "04012011", w: "Chúc Hải Việt năm mới bứt phá, học hành tấn tới và gặp bnhieu điều tốt lành!" },
+            { n: "Vi Trần Bảo", p: "06092011", w: "Chúc Bảo năm mới phong độ, học giỏi và đạt dc ước mơ của mình nhé!" },
+            { n: "Lương Việt Anh", p: "03052011", w: "Chúc Việt Anh năm mới thông minh, sáng tạo và luôn vui vẻ như hiện tại!" }
         ];
 
-        const queresults = ["Quẻ Đại Cát: Năm nay tiền vào như nước!", "Quẻ Học Thần: Thi đâu đỗ đó, học gì cũng giỏi!", "Quẻ Tình Duyên: Sắp có người thầm thương trộm nhớ!", "Quẻ Quý Nhân: Luôn có người giúp đỡ lúc khó khăn!", "Quẻ Sức Khỏe: Cả năm kh lo ốm đau, tinh thần sảng khoái!"];
+        const queresults = ["Quẻ Đại Cát: Tiền vào như nước, tình duyên phơi phới!", "Quẻ Học Thần: Thi đâu đỗ đó, kiến thức đầy mình!", "Quẻ Quý Nhân: Luôn có người giúp đỡ, vạn sự hanh thông!", "Quẻ Sức Khỏe: Khỏe như rồng, vui như Tết cả năm!", "Quẻ May Mắn: Cứ ra đường là gặp bnhieu điều tốt lành!"];
 
         let currentU = null;
-
-        // Render danh sách
         const grid = document.getElementById('userGrid');
         data.forEach(item => {
             const d = document.createElement('div'); d.className = 'user-card'; d.innerText = item.n;
@@ -147,13 +148,12 @@
             grid.appendChild(d);
         });
 
-        // Xử lý logic
         function checkAuth() {
             if(document.getElementById('passInput').value === currentU.p) {
                 document.getElementById('password-modal').style.display = 'none';
                 document.getElementById('lixi-layer').style.display = 'flex';
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            } else { alert("Mật khẩu chưa đúng rùi!"); }
+            } else { alert("Mật khẩu kh đúng rùi!"); }
         }
 
         function launchMain() {
@@ -161,7 +161,6 @@
             document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             document.getElementById('wishDisplay').innerText = currentU.w;
-            document.getElementById('tetMusic').play().catch(()=>{});
             startCD();
             setInterval(makePetal, 400);
             boom();
@@ -170,13 +169,12 @@
         function boom() {
             var end = Date.now() + 2000;
             (function f() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#d4af37'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#d4af37'] });
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#d4af37'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#d4af37'] });
                 if (Date.now() < end) requestAnimationFrame(f);
             }());
         }
 
-        // Đồng hồ & Countdown
         setInterval(() => {
             const n = new Date(); document.getElementById('clockDisplay').innerText = n.toLocaleTimeString();
             const s = new Date("2025-01-01").getTime(); const e = new Date("2026-02-17").getTime();
@@ -199,7 +197,7 @@
             setTimeout(() => {
                 document.getElementById('queText').innerText = "KẾT QUẢ: " + queresults[Math.floor(Math.random()*queresults.length)];
                 confetti({ particleCount: 40, scalar: 0.7 });
-            }, 1000);
+            }, 800);
         }
 
         function makePetal() {
@@ -212,10 +210,10 @@
         function drawMagic(e) {
             const dot = document.createElement('div');
             dot.style.position = 'fixed'; dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-            dot.style.width = '4px'; dot.style.height = '4px'; dot.style.background = 'var(--gold)';
+            dot.style.width = '3px'; dot.style.height = '3px'; dot.style.background = 'var(--gold)';
             dot.style.borderRadius = '50%'; dot.style.pointerEvents = 'none';
             document.body.appendChild(dot);
-            setTimeout(() => { dot.style.opacity = '0'; setTimeout(() => dot.remove(), 500); }, 200);
+            setTimeout(() => { dot.style.opacity = '0'; setTimeout(() => dot.remove(), 400); }, 100);
         }
     </script>
 </body>
