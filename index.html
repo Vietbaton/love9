@@ -7,13 +7,13 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Dancing+Script:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --red: #8b0000; --light: #f3e5ab; }
+        :root { --gold: #d4af37; --red: #b30000; --light: #f3e5ab; }
         * { box-sizing: border-box; }
         body { margin: 0; background: #2b0000; font-family: 'Quicksand', sans-serif; color: var(--light); overflow-x: hidden; }
         .bg-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #6b0000, #2b0000); z-index: -1; }
         
-        /* FIX LINK LỒNG ĐÈN */
-        .lantern { position: fixed; top: -10px; width: 50px; z-index: 100; animation: swing 3s ease-in-out infinite; transform-origin: top center; }
+        /* LỒNG ĐÈN SVG ĐUNG ĐƯA */
+        .lantern-container { position: fixed; top: -10px; z-index: 100; animation: swing 3s ease-in-out infinite; transform-origin: top center; width: 60px; }
         @keyframes swing { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
 
         .header-top { padding: 15px; background: rgba(0,0,0,0.5); border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 500; text-align: center; }
@@ -21,66 +21,86 @@
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), #fff); width: 0%; transition: 1s; }
 
         #selection-screen { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .title-gold { font-family: 'Cinzel'; font-size: clamp(2rem, 10vw, 3.5rem); color: var(--gold); text-shadow: 0 0 20px rgba(212,175,55,0.6); margin-bottom: 10px; }
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; max-width: 900px; width: 100%; margin-top: 30px; }
-        .user-card { background: rgba(255,255,255,0.05); border: 2px solid var(--gold); padding: 18px; border-radius: 15px; font-weight: bold; transition: 0.4s; cursor: pointer; }
-        .user-card:hover { background: var(--gold); color: var(--red); transform: translateY(-10px); box-shadow: 0 0 20px var(--gold); }
+        .title-gold { font-family: 'Cinzel'; font-size: clamp(1.8rem, 10vw, 3.5rem); color: var(--gold); text-shadow: 0 0 15px rgba(212,175,55,0.6); margin: 0; }
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; max-width: 900px; width: 100%; margin-top: 30px; }
+        .user-card { background: rgba(255,255,255,0.05); border: 2px solid var(--gold); padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .user-card:hover { background: var(--gold); color: var(--red); transform: scale(1.05); }
 
-        #password-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-        .modal-box { background: linear-gradient(135deg, #8b0000, #4a0000); padding: 40px; border-radius: 25px; border: 3px solid var(--gold); text-align: center; width: 90%; max-width: 340px; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 1.5rem; text-align: center; margin: 20px 0; background: var(--light); color: var(--red); font-weight: bold; }
+        #password-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .modal-box { background: linear-gradient(135deg, #8b0000, #4a0000); padding: 30px; border-radius: 20px; border: 2px solid var(--gold); text-align: center; width: 90%; max-width: 320px; }
+        input { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 1.5rem; text-align: center; margin: 15px 0; background: var(--light); color: var(--red); font-weight: bold; }
 
-        /* FIX LINK LÌ XÌ */
-        #lixi-layer { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-        .lixi-img { width: 150px; animation: bounce 1.2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-30px) rotate(5deg); } }
+        /* LÌ XÌ SVG BAY */
+        #lixi-layer { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.85); flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+        .lixi-svg { width: 120px; animation: bounce 1.2s infinite; filter: drop-shadow(0 0 10px gold); }
+        @keyframes bounce { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
 
-        #main-content { display: none; padding: 40px 15px; animation: fadeIn 1.5s ease; text-align: center; }
-        .wish-box { background: white; color: var(--red); padding: 35px; border-radius: 20px; border: 6px double var(--gold); max-width: 600px; margin: 30px auto; font-family: 'Dancing Script'; font-size: 1.8rem; box-shadow: 0 20px 50px rgba(0,0,0,0.7); position: relative; line-height: 1.6; }
+        #main-content { display: none; padding: 30px 15px; animation: fadeIn 1s ease; text-align: center; }
+        .wish-box { background: white; color: var(--red); padding: 30px; border-radius: 15px; border: 4px double var(--gold); max-width: 550px; margin: 20px auto; font-family: 'Dancing Script'; font-size: 1.7rem; line-height: 1.4; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .photo-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 50px; }
-        .polaroid { background: white; padding: 12px 12px 35px; box-shadow: 0 10px 30px #000; width: 100%; max-width: 300px; }
-        .polaroid img { width: 100%; height: auto; display: block; }
-        .polaroid p { color: #333; font-weight: bold; margin-top: 15px; }
+        .photo-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 40px; }
+        .polaroid { background: white; padding: 10px 10px 30px; box-shadow: 0 10px 20px #000; width: 280px; }
+        .polaroid img { width: 100%; height: auto; }
+        .polaroid p { color: #333; font-weight: bold; margin-top: 10px; }
 
         .petal { position: fixed; background: #ffeb3b; border-radius: 50% 0 50% 0; pointer-events: none; animation: fall linear infinite; z-index: 999; }
         @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
-        .countdown { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
-        .time-unit { background: var(--gold); color: var(--red); padding: 10px; border-radius: 8px; min-width: 65px; font-weight: 700; }
-        .time-unit span { display: block; font-size: 1.5rem; }
+        .countdown { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; }
+        .time-unit { background: var(--gold); color: var(--red); padding: 8px; border-radius: 5px; min-width: 60px; font-weight: bold; font-size: 0.9rem; }
+        .time-unit span { display: block; font-size: 1.4rem; }
     </style>
 </head>
 <body onmousemove="drawMagic(event)">
     <div class="bg-overlay"></div>
     
-    <img src="https://img.icons8.com/papercut/100/lantern.png" class="lantern" style="left: 5%;">
-    <img src="https://img.icons8.com/papercut/100/lantern.png" class="lantern" style="right: 5%;">
+    <div class="lantern-container" style="left: 4%;">
+        <svg viewBox="0 0 100 120">
+            <rect x="45" y="0" width="10" height="20" fill="gold"/>
+            <ellipse cx="50" cy="60" rx="40" ry="45" fill="#e60000" stroke="gold" stroke-width="2"/>
+            <line x1="50" y1="15" x2="50" y2="105" stroke="gold" stroke-width="2"/>
+            <rect x="30" y="105" width="40" height="10" fill="gold"/>
+        </svg>
+    </div>
+
+    <div class="lantern-container" style="right: 4%;">
+        <svg viewBox="0 0 100 120">
+            <rect x="45" y="0" width="10" height="20" fill="gold"/>
+            <ellipse cx="50" cy="60" rx="40" ry="45" fill="#e60000" stroke="gold" stroke-width="2"/>
+            <line x1="50" y1="15" x2="50" y2="105" stroke="gold" stroke-width="2"/>
+            <rect x="30" y="105" width="40" height="10" fill="gold"/>
+        </svg>
+    </div>
 
     <div class="header-top">
-        <div id="clockDisplay" style="color: var(--gold); font-weight: bold; font-size: 1.2rem;">00:00:00</div>
+        <div id="clockDisplay" style="color: var(--gold); font-weight: bold;">00:00:00</div>
         <div class="progress-container"><div class="progress-bar" id="pBar"></div></div>
     </div>
 
     <div id="selection-screen">
-        <h1 class="title-gold">XUÂN BÍNH NGỌ</h1>
-        <p style="letter-spacing: 2px; opacity: 0.8; font-weight: bold;">HỘI BẠN 2011 - KỶ NIỆM 15 NĂM</p>
+        <h1 class="title-gold">XUÂN 2026</h1>
+        <p style="letter-spacing: 2px; font-size: 0.9rem;">NIÊN KHÓA 2011 - 15 NĂM GẮN BÓ</p>
         <div class="user-grid" id="userGrid"></div>
-        <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.4;">© 2026 Designed by Việt</p>
+        <p style="margin-top: 40px; font-size: 0.7rem; opacity: 0.5;">Design by Hoàng Hữu Việt</p>
     </div>
 
     <div id="password-modal">
         <div class="modal-box">
             <h2 id="userName" style="color: var(--gold); margin: 0;"></h2>
-            <p>Mật khẩu là 8 số ngày sinh</p>
+            <p style="font-size: 0.9rem;">Nhập ngày sinh (8 số)</p>
             <input type="tel" id="passInput" maxlength="8" placeholder="********">
-            <button onclick="checkAuth()" style="background:var(--gold); border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">XÁC NHẬN</button>
-            <p onclick="location.reload()" style="font-size:0.8rem; margin-top:15px; cursor:pointer;">Quay lại</p>
+            <button onclick="checkAuth()" style="background:var(--gold); border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold; color:var(--red);">XÁC NHẬN</button>
+            <p onclick="location.reload()" style="font-size:0.7rem; margin-top:15px; cursor:pointer; text-decoration:underline;">Quay lại</p>
         </div>
     </div>
 
     <div id="lixi-layer" onclick="launchMain()">
-        <img src="https://img.icons8.com/emoji/128/red-envelope.png" class="lixi-img">
-        <h2 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 20px;">BẤM VÀO LÌ XÌ ĐỂ NHẬN QUÀ</h2>
+        <svg class="lixi-svg" viewBox="0 0 100 130">
+            <rect x="10" y="10" width="80" height="110" rx="10" fill="#cc0000" stroke="gold" stroke-width="3"/>
+            <path d="M10 10 Q50 60 90 10" fill="none" stroke="gold" stroke-width="2"/>
+            <circle cx="50" cy="70" r="15" fill="gold"/>
+            <text x="50" y="76" font-family="Arial" font-size="16" text-anchor="middle" fill="#cc0000" font-weight="bold">福</text>
+        </svg>
+        <h2 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 20px;">CHẠM ĐỂ MỞ LÌ XÌ</h2>
     </div>
 
     <div id="main-content">
@@ -90,13 +110,11 @@
             <div class="time-unit"><span id="cd-m">00</span>Phút</div>
             <div class="time-unit"><span id="cd-s">00</span>Giây</div>
         </div>
-
         <div class="wish-box" id="wishDisplay"></div>
-
         <div class="photo-container">
             <div class="polaroid" style="transform: rotate(-3deg);">
                 <img src="./9b1.jpg" onerror="this.src='https://picsum.photos/300/200?sig=1'">
-                <p>Kỷ niệm lớp 9B 🧧</p>
+                <p>9B Kỷ Niệm 🧧</p>
             </div>
             <div class="polaroid" style="transform: rotate(3deg);">
                 <img src="./9b2.jpg" onerror="this.src='https://picsum.photos/300/200?sig=2'">
@@ -109,39 +127,38 @@
         const data = [
             { n: "Nông Hữu Hiệp", p: "10112011", w: "Chúc Hiệp năm mới Bính Ngọ mạnh khỏe, học tập tiến tới và đạt dc bnhieu mục tiêu đề ra nhé!" },
             { n: "Dương Thị Khánh Linh", p: "23052011", w: "Chúc Linh luôn xinh đẹp, dịu dàng và một năm mới tràn ngập niềm vui bên gia đình!" },
-            { n: "Hoàng Ngọc Anh", p: "07062011", w: "Chúc Ngọc Anh năm 2026 thật rực rỡ, học giỏi và luôn là cô gái tự tin!" },
+            { n: "Hoàng Ngọc Anh", p: "07062011", w: "Chúc Ngọc Anh năm 2026 rực rỡ, học giỏi và luôn là cô gái tự tin!" },
             { n: "Hoàng Thị Thu Hương", p: "15112011", w: "Chúc Thu Hương năm mới vạn sự như ý, luôn tươi cười và gặp thật nhiều may mắn!" },
-            { n: "Dương Huyền Trang", p: "25022011", w: "Chúc Huyền Trang một năm Bính Ngọ đầy năng lượng, học siêu giỏi và luôn hạnh phúc!" },
-            { n: "Lương Hoài Vân", p: "21052011", w: "Chúc Hoài Vân năm mới xinh đẹp hơn, học tốt và có thật nhiều kỷ niệm đẹp!" },
-            { n: "Lương Bình Minh", p: "04122011", w: "Chúc Bình Minh khởi đầu năm mới rạng rỡ, thành công và luôn giữ vững phong độ!" },
-            { n: "Hoàng Hải Việt", p: "04012011", w: "Chúc Hải Việt năm mới bứt phá, học hành tấn tới và gặp bnhieu điều tốt lành!" },
-            { n: "Vi Trần Bảo", p: "06092011", w: "Chúc Bảo năm mới phong độ, học giỏi và đạt dc ước mơ của mình nhé!" },
-            { n: "Lương Việt Anh", p: "03052011", w: "Chúc Việt Anh năm mới thông minh, sáng tạo và luôn vui vẻ như hiện tại!" }
+            { n: "Dương Huyền Trang", p: "25022011", w: "Chúc Huyền Trang một năm đầy năng lượng, học siêu giỏi và luôn hạnh phúc!" },
+            { n: "Lương Hoài Vân", p: "21052011", w: "Chúc Hoài Vân năm mới xinh đẹp, học tốt và có thật nhiều kỷ niệm đẹp!" },
+            { n: "Lương Bình Minh", p: "04122011", w: "Chúc Bình Minh khởi đầu năm mới rạng rỡ, thành công và giữ vững phong độ!" },
+            { n: "Hoàng Hải Việt", p: "04012011", w: "Chúc Hải Việt năm mới bứt phá, học hành tấn tới và vạn sự hanh thông!" },
+            { n: "Vi Trần Bảo", p: "06092011", w: "Chúc Bảo năm mới phong độ, học giỏi và đạt dc mọi ước mơ nhé!" },
+            { n: "Lương Việt Anh", p: "03052011", w: "Chúc Việt Anh năm mới thông minh, sáng tạo và luôn vui vẻ!" }
         ];
 
-        let currentU = null;
+        let cur = null;
         const grid = document.getElementById('userGrid');
         data.forEach(item => {
             const d = document.createElement('div'); d.className = 'user-card'; d.innerText = item.n;
-            d.onclick = () => { currentU = item; document.getElementById('userName').innerText = item.n; document.getElementById('password-modal').style.display = 'flex'; };
+            d.onclick = () => { cur = item; document.getElementById('userName').innerText = item.n; document.getElementById('password-modal').style.display = 'flex'; };
             grid.appendChild(d);
         });
 
         function checkAuth() {
-            if(document.getElementById('passInput').value === currentU.p) {
+            if(document.getElementById('passInput').value === cur.p) {
                 document.getElementById('password-modal').style.display = 'none';
                 document.getElementById('lixi-layer').style.display = 'flex';
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            } else { alert("Sai mã rùi Việt ơi!"); }
+            } else { alert("Sai mã rùi bạn ơi!"); }
         }
 
         function launchMain() {
             document.getElementById('lixi-layer').style.display = 'none';
             document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
-            document.getElementById('wishDisplay').innerText = currentU.w;
-            startCD();
-            setInterval(makePetal, 400);
+            document.getElementById('wishDisplay').innerText = cur.w;
+            startCD(); setInterval(makePetal, 400);
         }
 
         setInterval(() => {
@@ -163,7 +180,7 @@
 
         function makePetal() {
             const p = document.createElement('div'); p.className = 'petal';
-            p.style.left = Math.random() * 100 + 'vw'; p.style.width = p.style.height = Math.random()*10+10+'px';
+            p.style.left = Math.random() * 100 + 'vw'; p.style.width = p.style.height = Math.random()*10+8+'px';
             p.style.animationDuration = Math.random()*3+3+'s'; document.body.appendChild(p);
             setTimeout(() => p.remove(), 5000);
         }
@@ -171,7 +188,7 @@
         function drawMagic(e) {
             const dot = document.createElement('div');
             dot.style.position = 'fixed'; dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-            dot.style.width = '3px'; dot.style.height = '3px'; dot.style.background = 'var(--gold)';
+            dot.style.width = '2px'; dot.style.height = '2px'; dot.style.background = 'var(--gold)';
             dot.style.borderRadius = '50%'; dot.style.pointerEvents = 'none';
             document.body.appendChild(dot);
             setTimeout(() => { dot.style.opacity = '0'; setTimeout(() => dot.remove(), 400); }, 100);
