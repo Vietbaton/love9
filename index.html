@@ -5,34 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xuân Bính Ngọ 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --red: #8b0000; --light: #f3e5ab; }
         body { margin: 0; background: #2b0000; font-family: 'Quicksand', sans-serif; color: var(--light); overflow-x: hidden; }
         .bg-overlay { position: fixed; inset: 0; background: radial-gradient(circle, #6b0000, #2b0000); z-index: -1; }
         
-        .header-top { padding: 15px; background: rgba(0,0,0,0.5); border-bottom: 2px solid var(--gold); text-align: center; position: sticky; top: 0; z-index: 100; }
-        
-        #selection-screen { padding: 20px; text-align: center; min-height: 80vh; display: flex; flex-direction: column; align-items: center; }
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; width: 100%; max-width: 800px; margin-top: 20px; }
-        .user-card { background: rgba(255,255,255,0.1); border: 1px solid var(--gold); padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .user-card:hover { background: var(--gold); color: var(--red); }
+        /* HEADER & CONTACT */
+        .header-top { padding: 15px; background: rgba(0,0,0,0.6); border-bottom: 2px solid var(--gold); text-align: center; }
+        #selection-screen { padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; width: 100%; max-width: 850px; margin-top: 20px; }
+        .user-card { background: rgba(255,255,255,0.1); border: 1px solid var(--gold); padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .admin-contact { background: rgba(255,255,255,0.05); border: 1px dashed var(--gold); border-radius: 12px; padding: 12px; margin-top: 25px; width: 100%; max-width: 400px; }
+        .contact-link { color: var(--gold); text-decoration: none; margin: 0 8px; font-size: 0.85rem; font-weight: bold; }
 
-        /* CONTACT CARD Ở TRANG ĐẦU */
-        .admin-contact { background: rgba(0,0,0,0.3); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; margin-top: 30px; width: 100%; max-width: 400px; }
-        .contact-link { display: inline-block; color: var(--gold); text-decoration: none; margin: 5px 10px; font-size: 0.9rem; font-weight: bold; }
-
-        #password-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center; }
-        .modal-box { background: #4a0000; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 90%; max-width: 320px; }
-        input { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 1.2rem; text-align: center; margin: 15px 0; background: white; color: #000; }
+        /* PHẦN NHẬP MK KIỂU NHANGUIYEUTHUONG */
+        #password-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
+        .modal-box { text-align: center; width: 95%; max-width: 400px; animation: fadeInUp 0.5s ease; }
+        .otp-container { display: flex; justify-content: center; gap: 8px; margin: 30px 0; }
+        .otp-input { 
+            width: 35px; height: 45px; border: 2px solid var(--gold); background: transparent; 
+            color: var(--gold); text-align: center; font-size: 1.5rem; font-weight: bold; border-radius: 8px; outline: none;
+        }
+        .otp-input:focus { background: rgba(212,175,55,0.2); box-shadow: 0 0 10px var(--gold); }
         
+        /* LIXI & CONTENT */
+        #lixi-layer { display: none; position: fixed; inset: 0; z-index: 10000; background: #8b0000; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
         #main-content { display: none; padding: 20px; text-align: center; }
-        .wish-box { background: white; color: var(--red); padding: 25px; border-radius: 15px; border: 4px double var(--gold); margin: 20px auto; max-width: 500px; font-size: 1.4rem; font-weight: bold; }
+        .wish-box { background: white; color: var(--red); padding: 25px; border-radius: 15px; border: 4px double var(--gold); margin: 20px auto; max-width: 500px; font-family: 'Dancing Script'; font-size: 1.6rem; }
+        .photo-frame { background: white; padding: 10px; width: 260px; box-shadow: 0 10px 20px #000; margin: 10px auto; transform: rotate(-2deg); }
         
-        .photo-frame { background: white; padding: 10px; width: 280px; box-shadow: 0 10px 20px #000; margin: 15px auto; }
-        .photo-frame img { width: 100%; height: auto; display: block; }
-
-        #lixi-layer { display: none; position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.9); flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .falling { position: fixed; top: -50px; z-index: 999; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -43,124 +48,143 @@
     </div>
 
     <div id="selection-screen">
-        <h2 style="color:var(--gold); margin-bottom:0;">XUÂN BÍNH NGỌ 2026</h2>
-        <p style="font-size: 0.8rem; letter-spacing: 2px;">NIÊN KHÓA 2011</p>
-        
+        <h2 style="color:var(--gold); font-family: 'Dancing Script'; font-size: 2rem;">Xuân Bính Ngọ 2026</h2>
         <div class="user-grid" id="userGrid"></div>
-
         <div class="admin-contact">
-            <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: var(--gold);">LIÊN HỆ ADMIN</p>
-            <a href="https://www.facebook.com/share/17wTRHWEvR/" target="_blank" class="contact-link">Facebook</a>
+            <a href="https://www.facebook.com/share/17wTRHWEvR/" target="_blank" class="contact-link">FB Admin</a>
             <a href="https://t.me/phaichiuh" target="_blank" class="contact-link">Telegram</a>
-            <a href="tel:0858344123" class="contact-link">0858.344.123</a>
+            <a href="tel:0858344123" class="contact-link">Hotline</a>
         </div>
     </div>
 
     <div id="password-modal">
         <div class="modal-box">
-            <h3 id="userNameDisplay" style="color: var(--gold); margin: 0;"></h3>
-            <input type="tel" id="passInput" maxlength="8" placeholder="Ngày sinh (8 số)">
-            <button onclick="checkAuth()" style="background:var(--gold); border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%; color: var(--red);">XÁC NHẬN</button>
-            <p onclick="closeModal()" style="margin-top:15px; font-size:0.8rem; cursor:pointer; opacity: 0.7;">Quay lại</p>
+            <h3 id="userNameDisplay" style="color: var(--gold); font-size: 1.4rem;"></h3>
+            <p style="opacity: 0.8; font-size: 0.8rem;">Nhập 8 số ngày sinh của bạn</p>
+            <div class="otp-container" id="otpBox">
+                <input type="tel" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1">
+                <input type="tel" class="otp-input" maxlength="1">
+            </div>
+            <p onclick="closeModal()" style="color: gray; cursor: pointer; font-size: 0.8rem;">Quay lại</p>
         </div>
     </div>
 
     <div id="lixi-layer" onclick="launchMain()">
-        <span style="font-size: 80px; filter: drop-shadow(0 0 10px gold);">🧧</span>
-        <h2 style="color: var(--gold);">BẤM ĐỂ NHẬN LỜI CHÚC</h2>
+        <div style="font-size: 80px; animation: bounce 1s infinite;">🧧</div>
+        <h2 style="color: var(--gold);">CHẠM ĐỂ MỞ QUÀ</h2>
     </div>
 
     <div id="main-content">
         <div class="wish-box" id="wishDisplay"></div>
-        
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px;">
-            <div class="photo-frame" style="transform: rotate(-2deg);">
-                <img src="./9b1.jpg" onerror="this.src='https://picsum.photos/300/200?sig=1'">
-                <p style="color: #333; margin: 5px 0 0 0; font-size: 0.9rem;">Kỷ niệm 9B</p>
-            </div>
-            <div class="photo-frame" style="transform: rotate(2deg);">
-                <img src="./9b2.jpg" onerror="this.src='https://picsum.photos/300/200?sig=2'">
-                <p style="color: #333; margin: 5px 0 0 0; font-size: 0.9rem;">Mãi là bạn tốt</p>
-            </div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <div class="photo-frame"><img src="./9b1.jpg" style="width:100%" onerror="this.src='https://picsum.photos/300/200?1'"></div>
+            <div class="photo-frame" style="transform: rotate(2deg);"><img src="./9b2.jpg" style="width:100%" onerror="this.src='https://picsum.photos/300/200?2'"></div>
         </div>
-
-        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px dashed var(--gold); margin: 30px auto; max-width: 500px;">
-            <h4 style="margin: 0; color: var(--gold);">🔮 QUẺ THĂM MAY MẮN</h4>
-            <p id="queText" style="margin: 15px 0;">Bạn muốn biết vận hạn năm nay kh?</p>
-            <button onclick="gieoQue()" style="background:var(--gold); border:none; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer;">GIEO QUẺ</button>
+        <div style="margin-top: 30px; border-top: 1px solid var(--gold); padding-top: 20px;">
+            <p id="queText">Năm nay bạn thế nào?</p>
+            <button onclick="gieoQue()" style="background:var(--gold); border:none; padding:10px 20px; border-radius:20px; font-weight:bold;">GIEO QUẺ</button>
         </div>
     </div>
 
     <script>
         const data = [
-            { n: "Nông Hữu Hiệp", p: "10112011", w: "Chúc Hiệp năm mới Bính Ngọ mạnh khỏe, vạn sự như ý nhé!" },
-            { n: "Dương Thị Khánh Linh", p: "23052011", w: "Chúc Linh luôn xinh đẹp và gặp bnhieu may mắn!" },
-            { n: "Hoàng Ngọc Anh", p: "07062011", w: "Chúc Ngọc Anh năm mới rạng rỡ và thành công rực rỡ!" },
-            { n: "Hoàng Thị Thu Hương", p: "15112011", w: "Chúc Thu Hương năm mới tấn tài tấn lộc, bình an!" },
-            { n: "Dương Huyền Trang", p: "25022011", w: "Chúc Huyền Trang luôn vui vẻ, học giỏi và xinh đẹp!" },
-            { n: "Lương Hoài Vân", p: "21052011", w: "Chúc Hoài Vân năm mới bnhieu niềm vui và hạnh phúc!" },
-            { n: "Lương Bình Minh", p: "04122011", w: "Chúc Bình Minh năm mới bứt phá và gặp dc bnhieu cơ hội!" },
-            { n: "Hoàng Hải Việt", p: "04012011", w: "Chúc Hải Việt vạn sự hanh thông, sức khỏe dồi dào!" },
-            { n: "Vi Trần Bảo", p: "06092011", w: "Chúc Bảo năm mới phong độ và đạt dc mọi ước mơ!" },
-            { n: "Lương Việt Anh", p: "03052011", w: "Chúc Việt Anh luôn thông minh và gặt hái bnhieu thành công!" }
+            { n: "Nông Hữu Hiệp", p: "10112011", w: "Chúc Hiệp năm mới vạn sự như ý!" },
+            { n: "Dương Thị Khánh Linh", p: "23052011", w: "Chúc Linh luôn xinh đẹp!" },
+            { n: "Hoàng Ngọc Anh", p: "07062011", w: "Chúc Ngọc Anh rạng rỡ!" },
+            { n: "Hoàng Thị Thu Hương", p: "15112011", w: "Chúc Thu Hương bình an!" },
+            { n: "Dương Huyền Trang", p: "25022011", w: "Chúc Huyền Trang học giỏi!" },
+            { n: "Lương Hoài Vân", p: "21052011", w: "Chúc Hoài Vân hạnh phúc!" },
+            { n: "Lương Bình Minh", p: "04122011", w: "Chúc Bình Minh bứt phá!" },
+            { n: "Hoàng Hải Việt", p: "04012011", w: "Chúc Hải Việt vạn sự hanh thông!" },
+            { n: "Vi Trần Bảo", p: "06092011", w: "Chúc Bảo phong độ!" },
+            { n: "Lương Việt Anh", p: "03052011", w: "Chúc Việt Anh thông minh!" },
+            { n: "Triệu Đức Hiệp", p: "01122011", w: "Chúc Hiệp 112 năm mới rực rỡ!" },
+            { n: "Nguyễn Anh Đức", p: "09122011", w: "Chúc Đức 912 tấn tài tấn lộc!" },
+            { n: "La Uyển Nhi", p: "28032011", w: "Chúc Uyển Nhi luôn tươi trẻ!" },
+            { n: "Nông Bảo Ánh", p: "07092011", w: "Chúc Bảo Ánh thành công rực rỡ!" }
         ];
 
         let curUser = null;
+        const inputs = document.querySelectorAll('.otp-input');
 
+        // Logic chọn người
         const grid = document.getElementById('userGrid');
         data.forEach(item => {
             const btn = document.createElement('div');
-            btn.className = 'user-card';
-            btn.innerText = item.n;
+            btn.className = 'user-card'; btn.innerText = item.n;
             btn.onclick = () => {
                 curUser = item;
                 document.getElementById('userNameDisplay').innerText = item.n;
                 document.getElementById('password-modal').style.display = 'flex';
-                document.getElementById('passInput').value = "";
+                inputs.forEach(i => i.value = "");
+                inputs[0].focus();
             };
             grid.appendChild(btn);
         });
 
-        function closeModal() { document.getElementById('password-modal').style.display = 'none'; }
+        // Xử lý nhập OTP kiểu nhanguiyeuthuong
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+                checkFullCode();
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
 
-        function checkAuth() {
-            if (document.getElementById('passInput').value === curUser.p) {
-                document.getElementById('password-modal').style.display = 'none';
-                document.getElementById('lixi-layer').style.display = 'flex';
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            } else { alert("Mã kh đúng rồi bạn ơi!"); }
+        function checkFullCode() {
+            let code = "";
+            inputs.forEach(i => code += i.value);
+            if (code.length === 8) {
+                if (code === curUser.p) {
+                    setTimeout(() => {
+                        document.getElementById('password-modal').style.display = 'none';
+                        document.getElementById('lixi-layer').style.display = 'flex';
+                        confetti({ particleCount: 150, spread: 70 });
+                    }, 300);
+                } else {
+                    alert("Sai mã rồi bạn ơi!");
+                    inputs.forEach(i => i.value = "");
+                    inputs[0].focus();
+                }
+            }
         }
 
+        function closeModal() { document.getElementById('password-modal').style.display = 'none'; }
         function launchMain() {
             document.getElementById('lixi-layer').style.display = 'none';
             document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             document.getElementById('wishDisplay').innerText = curUser.w;
-            setInterval(makeFallingLixi, 1000);
+            setInterval(() => createFalling('🧧'), 1000);
+            setInterval(() => createFalling('🌸'), 1500);
+        }
+
+        function createFalling(s) {
+            const e = document.createElement('div'); e.className = 'falling';
+            e.innerText = s; e.style.left = Math.random()*100+'vw';
+            e.style.animationDuration = Math.random()*3+3+'s';
+            document.body.appendChild(e); setTimeout(() => e.remove(), 5000);
         }
 
         function gieoQue() {
-            const list = ["Quẻ Đại Cát: Tiền vào như nước!", "Quẻ Quý Nhân: Luôn có người giúp đỡ!", "Quẻ Bình An: Cả năm khỏe mạnh!", "Quẻ Hanh Thông: Vạn sự như ý!"];
-            document.getElementById('queText').innerText = list[Math.floor(Math.random()*list.length)];
-            confetti({ particleCount: 30 });
+            const l = ["Đại Cát: Tiền vào như nước!", "Quý Nhân: Luôn được giúp đỡ!", "Bình An: Cả năm khỏe mạnh!", "Tài Lộc: May mắn cả năm!"];
+            document.getElementById('queText').innerText = "KẾT QUẢ: " + l[Math.floor(Math.random()*l.length)];
+            confetti({ particleCount: 40 });
         }
 
-        function makeFallingLixi() {
-            const l = document.createElement('div');
-            l.innerText = '🧧';
-            l.style.position = 'fixed';
-            l.style.left = Math.random()*100+'vw';
-            l.style.top = '-20px';
-            l.style.zIndex = '999';
-            l.style.transition = 'transform 5s linear';
-            document.body.appendChild(l);
-            setTimeout(() => { l.style.transform = 'translateY(110vh)'; }, 100);
-            setTimeout(() => l.remove(), 5500);
-        }
-
-        setInterval(() => {
-            document.getElementById('clockDisplay').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        setInterval(() => { document.getElementById('clockDisplay').innerText = new Date().toLocaleTimeString(); }, 1000);
     </script>
 </body>
 </html>
