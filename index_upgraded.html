@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9B - Xuân Bính Ngọ 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --red: #8b0000;
+            --light: #f3e5ab;
+            --bg-dark: #2b0000;
+            --bg-light: #fff5e6;
+            --text-light: #f3e5ab;
+            --text-dark: #2b0000;
+        }
+        
+        body {
+            margin: 0;
+            background: var(--bg-dark);
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-light);
+            overflow-x: hidden;
+            touch-action: manipulation;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        body.light-mode {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        body.light-mode .user-card {
+            background: rgba(139, 0, 0, 0.1);
+        }
+
+        body.light-mode .header-top {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+        }
+
+        body.light-mode #days {
+            color: var(--red) !important;
+        }
+
+        body.light-mode .admin-letter {
+            background: #fff9c4;
+        }
+
+        /* LOADING SCREEN */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #8b0000, #2b0000);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+        }
+
+        .loading-lantern {
+            width: 80px;
+            height: 100px;
+            position: relative;
+            animation: loadingSway 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingSway {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        .loading-text {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            color: var(--gold);
+            font-family: 'Dancing Script';
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            margin-top: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+            animation: loadProgress 2s ease-in-out forwards;
+        }
+
+        @keyframes loadProgress {
+            to { width: 100%; }
+        }
+
+        /* THEME TOGGLE */
+        .theme-toggle {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(212, 175, 55, 0.2);
+            border: 2px solid var(--gold);
+            border-radius: 50px;
+            padding: 8px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(212, 175, 55, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* AUDIO CONTROLS */
+        .audio-toggle {
+            position: fixed;
+            top: 130px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(212, 175, 55, 0.2);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .audio-toggle:hover {
+            background: rgba(212, 175, 55, 0.4);
+            transform: scale(1.1);
+        }
+
+        .audio-toggle.playing {
+            animation: audioWave 1s ease-in-out infinite;
+        }
+
+        @keyframes audioWave {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Lồng đèn với Parallax */
+        .lantern-svg {
+            position: fixed;
+            top: -10px;
+            width: 65px;
+            z-index: 1000;
+            animation: swing 3s ease-in-out infinite alternate;
+            transform-origin: top center;
+            filter: drop-shadow(0 0 15px red);
+            transition: transform 0.1s;
+        }
+
+        .lantern-left { left: 10px; }
+        .lantern-right { right: 10px; }
+
+        @keyframes swing {
+            from { transform: rotate(-10deg); }
+            to { transform: rotate(10deg); }
+        }
+
+        /* Kính vạn hoa */
+        .sparkle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: fadeOut 0.8s forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(2); }
+        }
+
+        /* Toast đẹp hơn */
+        .toast {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 50px;
+            z-index: 10000;
+            transition: top 0.4s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #c62828, #8b0000);
+            color: white;
+            border: 2px solid var(--gold);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #388e3c, #1b5e20);
+            color: white;
+            border: 2px solid var(--gold);
+        }
+
+        .shake {
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            25% { transform: translateX(-50%) translateY(-8px); }
+            75% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        .header-top {
+            padding: 15px;
+            background: rgba(0,0,0,0.85);
+            border-bottom: 2px solid var(--gold);
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Countdown động */
+        #countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .countdown-box {
+            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(139,0,0,0.2));
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 15px;
+            min-width: 70px;
+            text-align: center;
+            animation: countPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes countPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(212,175,55,0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(212,175,55,0.6); }
+        }
+
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--gold);
+            font-family: 'Dancing Script';
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* User grid responsive */
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .user-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 800px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .user-grid {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 1000px;
+            }
+        }
+
+        .user-card {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--gold);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212,175,55,0.3);
+        }
+
+        .user-card:active {
+            transform: scale(0.95);
+        }
+
+        /* Avatar với skeleton loading */
+        .avatar-container {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            position: relative;
+        }
+
+        .avatar-skeleton {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .avatar.loaded {
+            opacity: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Photo section responsive */
+        .photo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        @media (min-width: 768px) {
+            .photo-section {
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            width: 85%;
+            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transform: rotate(-2deg);
+            transition: all 0.3s;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(3deg);
+        }
+
+        .polaroid:nth-child(even):hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+        }
+
+        .polaroid p {
+            color: #333;
+            font-family: 'Dancing Script';
+            font-size: 1.2rem;
+            margin: 10px 0 0 0;
+            text-align: center;
+        }
+
+        .admin-letter {
+            background: #fff9c4;
+            color: #333;
+            padding: 25px;
+            margin: 40px 15px;
+            border-radius: 2px;
+            box-shadow: 8px 8px 20px rgba(0,0,0,0.4);
+            transform: rotate(-1deg);
+        }
+
+        @media (min-width: 768px) {
+            .admin-letter {
+                max-width: 600px;
+                margin: 40px auto;
+            }
+        }
+
+        #password-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .otp-input {
+            width: 35px;
+            height: 45px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            text-align: center;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            margin: 0 2px;
+            outline: none;
+        }
+
+        #wish-screen {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .wish-box {
+            background: white;
+            color: var(--red);
+            padding: 30px;
+            border-radius: 15px;
+            border: 4px double var(--gold);
+            font-family: 'Dancing Script';
+            font-size: 1.8rem;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .falling {
+            position: fixed;
+            top: -50px;
+            z-index: 999;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* Location badge */
+        .location-badge {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 2px solid var(--gold);
+            border-radius: 25px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* CONTACT SECTION */
+        .contact-section {
+            background: linear-gradient(135deg, rgba(139,0,0,0.3), rgba(43,0,0,0.5));
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 40px 20px;
+            margin: 60px 15px 40px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-mode .contact-section {
+            background: linear-gradient(135deg, rgba(255,245,230,0.8), rgba(255,235,205,0.6));
+        }
+
+        .contact-section::before {
+            content: '🧧';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 120px;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            margin: 0 auto 15px;
+            display: block;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(212,175,55,0.4);
+            animation: avatarPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(212,175,55,0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(212,175,55,0.6); }
+        }
+
+        .contact-name {
+            font-family: 'Dancing Script';
+            font-size: 2rem;
+            color: var(--gold);
+            margin: 10px 0 5px 0;
+        }
+
+        .contact-title {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .contact-subtitle {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .contact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        body.light-mode .contact-item {
+            background: rgba(139,0,0,0.05);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212,175,55,0.3);
+            background: rgba(212,175,55,0.2);
+        }
+
+        .contact-item:active {
+            transform: scale(0.98);
+        }
+
+        .contact-icon {
+            font-size: 1.8rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-value {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-top: 2px;
+            word-break: break-all;
+        }
+
+        .contact-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(212,175,55,0.3);
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body onmousemove="sparkle(event)" ontouchmove="sparkle(event.touches[0])">
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen">
+        <svg class="loading-lantern" viewBox="0 0 100 120">
+            <rect x="45" y="0" width="10" height="20" fill="#d4af37"/>
+            <ellipse cx="50" cy="60" rx="40" ry="45" fill="#e60000"/>
+            <line x1="50" y1="15" x2="50" y2="105" stroke="#b30000" stroke-width="2"/>
+            <rect x="30" y="105" width="40" height="10" fill="#d4af37"/>
+            <rect x="48" y="115" width="4" height="20" fill="#d4af37"/>
+        </svg>
+        <div class="loading-text">Đang tải kỷ niệm...</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- AUDIO ELEMENTS -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4a6012852f.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="fireworkSound">
+        <source src="https://cdn.pixabay.com/audio/2022/03/24/audio_1895bfdf03.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- THEME TOGGLE -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Tối</span>
+    </div>
+
+    <!-- AUDIO TOGGLE -->
+    <div class="audio-toggle" onclick="toggleAudio()">
+        <span id="audioIcon">🔇</span>
+    </div>
+
+    <!-- LOCATION BADGE -->
+    <div class="location-badge" id="locationBadge">
+        <span>📍</span>
+        <span id="locationText">Đang lấy vị trí...</span>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast error" id="errorToast">
+        <span>❌</span>
+        <span>Sai mã rồi Việt ơi!</span>
+    </div>
+    <div class="toast success" id="successToast">
+        <span>🎉</span>
+        <span>Chúc mừng năm mới!</span>
+    </div>
+
+    <!-- LANTERNS -->
+    <svg class="lantern-svg lantern-left" viewBox="0 0 100 120">
+        <rect x="45" y="0" width="10" height="20" fill="#d4af37"/>
+        <ellipse cx="50" cy="60" rx="40" ry="45" fill="#e60000"/>
+        <line x1="50" y1="15" x2="50" y2="105" stroke="#b30000" stroke-width="2"/>
+        <rect x="30" y="105" width="40" height="10" fill="#d4af37"/>
+        <rect x="48" y="115" width="4" height="20" fill="#d4af37"/>
+    </svg>
+    <svg class="lantern-svg lantern-right" viewBox="0 0 100 120">
+        <rect x="45" y="0" width="10" height="20" fill="#d4af37"/>
+        <ellipse cx="50" cy="60" rx="40" ry="45" fill="#e60000"/>
+        <line x1="50" y1="15" x2="50" y2="105" stroke="#b30000" stroke-width="2"/>
+        <rect x="30" y="105" width="40" height="10" fill="#d4af37"/>
+        <rect x="48" y="115" width="4" height="20" fill="#d4af37"/>
+    </svg>
+
+    <div id="selection-screen">
+        <div class="header-top">
+            <div id="clock" style="font-weight: bold;">00:00:00</div>
+            <div id="days" style="font-size: 0.8rem; color: var(--gold); margin-top: 5px;"></div>
+        </div>
+
+        <h1 style="font-family: 'Dancing Script'; text-align: center; color: var(--gold); font-size: 2.8rem; margin: 20px 0 0 0;">Xuân Bính Ngọ 2026</h1>
+        <p style="text-align: center; font-size: 0.75rem; letter-spacing: 2px; opacity: 0.8;">LỚP 9B NIÊN KHÓA 2011</p>
+
+        <!-- COUNTDOWN ĐỘNG -->
+        <div id="countdown-container">
+            <div class="countdown-box">
+                <div class="countdown-number" id="countDays">0</div>
+                <div class="countdown-label">Ngày</div>
+            </div>
+            <div class="countdown-box">
+                <div class="countdown-number" id="countHours">0</div>
+                <div class="countdown-label">Giờ</div>
+            </div>
+            <div class="countdown-box">
+                <div class="countdown-number" id="countMinutes">0</div>
+                <div class="countdown-label">Phút</div>
+            </div>
+            <div class="countdown-box">
+                <div class="countdown-number" id="countSeconds">0</div>
+                <div class="countdown-label">Giây</div>
+            </div>
+        </div>
+
+        <div class="user-grid" id="grid"></div>
+
+        <div class="photo-section">
+            <div class="polaroid">
+                <img src="./9b1.jpg" onerror="this.src='https://picsum.photos/400/300?sig=1'" onload="this.classList.add('loaded')">
+                <p>Tập thể lớp 9B</p>
+            </div>
+            <div class="polaroid">
+                <img src="./9b2.jpg" onerror="this.src='https://picsum.photos/400/300?sig=2'" onload="this.classList.add('loaded')">
+                <p>Mùa hè năm ấy...</p>
+            </div>
+        </div>
+
+        <!-- CONTACT SECTION -->
+        <div class="contact-section">
+            <div class="contact-header">
+                <img src="./avatar-viet.jpg" alt="Hoàng Hữu Việt" class="contact-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Viet&background=d4af37&color=8b0000&size=240'">
+                <h3 class="contact-name">Hoàng Hữu Việt</h3>
+                <p class="contact-title">Web Developer & Admin 9B</p>
+                <p class="contact-subtitle">Kết nối với tôi qua các kênh sau</p>
+            </div>
+
+            <div class="contact-grid">
+                <a href="https://www.facebook.com/share/1HCNG48sXU/" target="_blank" class="contact-item">
+                    <div class="contact-icon">📘</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Facebook</div>
+                        <div class="contact-value">Hoàng Hữu Việt</div>
+                    </div>
+                </a>
+
+                <a href="mailto:huuviet2202@gmail.com" class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">huuviet2202@gmail.com</div>
+                    </div>
+                </a>
+
+                <a href="tel:0858344123" class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Điện thoại</div>
+                        <div class="contact-value">0858 344 123</div>
+                    </div>
+                </a>
+
+                <a href="https://zalo.me/0858344123" target="_blank" class="contact-item">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Zalo</div>
+                        <div class="contact-value">0858 344 123</div>
+                    </div>
+                </a>
+
+                <a href="https://t.me/phaichiuh" target="_blank" class="contact-item">
+                    <div class="contact-icon">✈️</div>
+                    <div class="contact-info">
+                        <div class="contact-label">Telegram</div>
+                        <div class="contact-value">@phaichiuh</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="contact-footer">
+                <p>💌 Luôn sẵn sàng kết nối và chia sẻ kỷ niệm cùng 9B!</p>
+            </div>
+        </div>
+
+        <div class="admin-letter">
+            <h3 style="margin:0; color: var(--red);">Gửi 9B thân yêu...</h3>
+            <p>Dù đã 15 năm trôi qua, biết bao kỉ niệm vẫn còn đó. Việt làm web này để chúng mình cùng nhìn lại một thời biết bao vui vẻ. Chúc các bạn năm mới vạn sự như ý!</p>
+            <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.2rem; color: var(--red);">Admin Việt</p>
+        </div>
+    </div>
+
+    <div id="password-modal">
+        <h3 id="targetName" style="color: var(--gold); font-size: 1.5rem;"></h3>
+        <p style="font-size: 0.85rem; opacity: 0.7;">Nhập 8 số ngày sinh để mở quà</p>
+        <div id="otpBox" style="margin: 25px 0;">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="password" class="otp-input" maxlength="1" inputmode="numeric">
+        </div>
+        <button onclick="document.getElementById('password-modal').style.display='none'" style="background:none; border:none; color:#999; text-decoration: underline; cursor: pointer;">Quay lại</button>
+    </div>
+
+    <div id="wish-screen">
+        <h2 style="color: var(--gold); font-family: 'Dancing Script'; font-size: 2.2rem;">Chúc Mừng Năm Mới!</h2>
+        <div class="wish-box" id="typing"></div>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:10px 25px; border-radius:25px; margin-top: 30px; cursor: pointer;">Về trang chủ</button>
+    </div>
+
+    <script>
+        const members = [
+            { n: "Nông Hữu Hiệp", p: "10112011", w: "Chúc bạn năm mới thành công, luôn vui vẻ và hạnh phúc bên gia đình!", avatar: "https://ui-avatars.com/api/?name=Hiep&background=d4af37&color=8b0000&size=128" },
+            { n: "Dương Thị Khánh Linh", p: "23052011", w: "Năm mới dồi dào sức khỏe, công việc thuận lợi, gia đình ấm áp!", avatar: "https://ui-avatars.com/api/?name=Linh&background=d4af37&color=8b0000&size=128" },
+            { n: "Hoàng Ngọc Anh", p: "07062011", w: "Chúc bạn luôn tươi trẻ, xinh đẹp và gặp nhiều may mắn trong năm mới!", avatar: "https://ui-avatars.com/api/?name=Anh&background=d4af37&color=8b0000&size=128" },
+            { n: "Hoàng Thị Thu Hương", p: "15112011", w: "Năm Bính Ngọ thành công rực rỡ, sức khỏe dồi dào, hạnh phúc viên mãn!", avatar: "https://ui-avatars.com/api/?name=Huong&background=d4af37&color=8b0000&size=128" },
+            { n: "Dương Huyền Trang", p: "25022011", w: "Chúc bạn luôn vui vẻ, tràn đầy năng lượng và đạt được mọi mục tiêu!", avatar: "https://ui-avatars.com/api/?name=Trang&background=d4af37&color=8b0000&size=128" },
+            { n: "Lương Hoài Vân", p: "21052011", w: "Năm mới an khang thịnh vượng, vạn sự như ý, tài lộc đầy nhà!", avatar: "https://ui-avatars.com/api/?name=Van&background=d4af37&color=8b0000&size=128" },
+            { n: "Lương Bình Minh", p: "04122011", w: "Chúc bạn sự nghiệp thăng tiến, gia đạo yên vui, phúc lộc song toàn!", avatar: "https://ui-avatars.com/api/?name=Minh&background=d4af37&color=8b0000&size=128" },
+            { n: "Hoàng Hải Việt", p: "04012011", w: "Năm mới nhiều niềm vui, công việc hanh thông, gia đình hạnh phúc!", avatar: "./avatar-viet.jpg" },
+            { n: "Vi Trần Bảo", p: "06092011", w: "Chúc bạn luôn khỏe mạnh, thành đạt và gặt hái nhiều thành công!", avatar: "https://ui-avatars.com/api/?name=Bao&background=d4af37&color=8b0000&size=128" },
+            { n: "Lương Việt Anh", p: "03052011", w: "Năm Bính Ngọ tràn đầy năng lượng, vượng khí sinh tài, mọi sự hanh thông!", avatar: "https://ui-avatars.com/api/?name=VAnh&background=d4af37&color=8b0000&size=128" },
+            { n: "Triệu Đức Hiệp", p: "01122011", w: "Chúc bạn sức khỏe dồi dào, công danh thịnh đạt, gia đạo êm ấm!", avatar: "https://ui-avatars.com/api/?name=DHiep&background=d4af37&color=8b0000&size=128" },
+            { n: "Nguyễn Anh Đức", p: "09122011", w: "Năm mới phát tài phát lộc, vạn sự như ý, gia đình hạnh phúc!", avatar: "https://ui-avatars.com/api/?name=Duc&background=d4af37&color=8b0000&size=128" },
+            { n: "La Uyển Nhi", p: "28032011", w: "Chúc bạn luôn xinh đẹp, tươi trẻ và gặp nhiều điều tốt lành!", avatar: "https://ui-avatars.com/api/?name=Nhi&background=d4af37&color=8b0000&size=128" },
+            { n: "Nông Bảo Ánh", p: "07092011", w: "Năm mới an khang, thịnh vượng, vạn sự hanh thông như ý nguyện!", avatar: "https://ui-avatars.com/api/?name=BAnh&background=d4af37&color=8b0000&size=128" }
+        ];
+
+        let selected = null;
+        const inputs = document.querySelectorAll('.otp-input');
+        let audioEnabled = false;
+        let isDarkMode = true;
+
+        // LOADING SCREEN
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        // LOCATION
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=vi`)
+                        .then(res => res.json())
+                        .then(data => {
+                            document.getElementById('locationText').innerText = data.city || data.locality || 'Việt Nam';
+                            document.getElementById('locationBadge').style.display = 'flex';
+                        })
+                        .catch(() => {
+                            document.getElementById('locationText').innerText = 'Việt Nam';
+                            document.getElementById('locationBadge').style.display = 'flex';
+                        });
+                },
+                () => {
+                    document.getElementById('locationText').innerText = 'Vị trí không xác định';
+                    document.getElementById('locationBadge').style.display = 'flex';
+                }
+            );
+        }
+
+        // THEME TOGGLE
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('light-mode');
+            document.getElementById('themeIcon').innerText = isDarkMode ? '🌙' : '☀️';
+            document.getElementById('themeText').innerText = isDarkMode ? 'Tối' : 'Sáng';
+        }
+
+        // AUDIO TOGGLE
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const bgMusic = document.getElementById('bgMusic');
+            const audioToggle = document.querySelector('.audio-toggle');
+            
+            if (audioEnabled) {
+                bgMusic.play().catch(e => console.log('Audio blocked:', e));
+                document.getElementById('audioIcon').innerText = '🔊';
+                audioToggle.classList.add('playing');
+            } else {
+                bgMusic.pause();
+                document.getElementById('audioIcon').innerText = '🔇';
+                audioToggle.classList.remove('playing');
+            }
+        }
+
+        // SPARKLE
+        function sparkle(e) {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.style.left = (e.clientX || e.pageX) + 'px';
+            s.style.top = (e.clientY || e.pageY) + 'px';
+            s.style.background = ['#d4af37','#ffffff','#ff4d4d','#ffeb3b'][Math.floor(Math.random()*4)];
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 800);
+        }
+
+        // PARALLAX SCROLL
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scroll = window.pageYOffset;
+            const lanterns = document.querySelectorAll('.lantern-svg');
+            lanterns.forEach((lantern, i) => {
+                lantern.style.transform = `translateY(${scroll * 0.3}px)`;
+            });
+            lastScroll = scroll;
+        });
+
+        // RENDER USER CARDS
+        const grid = document.getElementById('grid');
+        members.forEach(m => {
+            const div = document.createElement('div');
+            div.className = 'user-card';
+            
+            const avatarContainer = document.createElement('div');
+            avatarContainer.className = 'avatar-container';
+            
+            const skeleton = document.createElement('div');
+            skeleton.className = 'avatar-skeleton';
+            avatarContainer.appendChild(skeleton);
+            
+            const avatar = document.createElement('img');
+            avatar.className = 'avatar';
+            avatar.src = m.avatar;
+            avatar.onload = () => {
+                avatar.classList.add('loaded');
+                skeleton.style.display = 'none';
+            };
+            avatarContainer.appendChild(avatar);
+            
+            const name = document.createElement('div');
+            name.className = 'user-name';
+            name.innerText = m.n;
+            
+            div.appendChild(avatarContainer);
+            div.appendChild(name);
+            
+            div.onclick = () => {
+                selected = m;
+                document.getElementById('targetName').innerText = m.n;
+                document.getElementById('password-modal').style.display = 'flex';
+                inputs.forEach(i => i.value = "");
+                inputs[0].focus();
+            };
+            
+            grid.appendChild(div);
+        });
+
+        // OTP INPUT
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value && index < 7) inputs[index + 1].focus();
+                
+                if (Array.from(inputs).every(i => i.value)) {
+                    if (Array.from(inputs).map(i => i.value).join("") === selected.p) {
+                        // SUCCESS
+                        document.getElementById('password-modal').style.display = 'none';
+                        document.getElementById('selection-screen').style.display = 'none';
+                        document.getElementById('wish-screen').style.display = 'block';
+                        
+                        // Play firework sound
+                        if (audioEnabled) {
+                            document.getElementById('fireworkSound').play().catch(e => console.log(e));
+                        }
+                        
+                        // Confetti
+                        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                        setTimeout(() => confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } }), 300);
+                        setTimeout(() => confetti({ particleCount: 120, spread: 90, origin: { y: 0.7 } }), 600);
+                        
+                        // Success toast
+                        const successToast = document.getElementById('successToast');
+                        successToast.style.top = '20px';
+                        setTimeout(() => successToast.style.top = '-100px', 3000);
+                        
+                        // Type effect
+                        let i = 0;
+                        function type() {
+                            if (i < selected.w.length) {
+                                document.getElementById('typing').innerHTML += selected.w.charAt(i);
+                                i++;
+                                setTimeout(type, 100);
+                            }
+                        }
+                        type();
+                    } else {
+                        // ERROR
+                        const errorToast = document.getElementById('errorToast');
+                        errorToast.style.top = '20px';
+                        document.getElementById('otpBox').classList.add('shake');
+                        
+                        setTimeout(() => {
+                            errorToast.style.top = '-100px';
+                            document.getElementById('otpBox').classList.remove('shake');
+                            inputs.forEach(i => i.value = "");
+                            inputs[0].focus();
+                        }, 2000);
+                    }
+                }
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // CLOCK & COUNTDOWN
+        function updateCountdown() {
+            const now = new Date();
+            const tet = new Date("2026-02-17T00:00:00");
+            const diff = tet - now;
+            
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('countDays').innerText = days;
+                document.getElementById('countHours').innerText = hours;
+                document.getElementById('countMinutes').innerText = minutes;
+                document.getElementById('countSeconds').innerText = seconds;
+            }
+        }
+
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('vi-VN');
+            updateCountdown();
+        }, 1000);
+
+        // FALLING ITEMS
+        setInterval(() => {
+            const e = document.createElement('div');
+            e.className = 'falling';
+            e.innerText = ['🌸', '🧧', '🌼', '🎋', '🏮'][Math.floor(Math.random()*5)];
+            e.style.left = Math.random()*100+'vw';
+            e.style.fontSize = (Math.random()*20 + 20) + 'px';
+            e.style.animationDuration = Math.random()*3+4+'s';
+            document.body.appendChild(e);
+            setTimeout(() => e.remove(), 7000);
+        }, 1000);
+
+        // Initial update
+        updateCountdown();
+    </script>
+</body>
+</html>
